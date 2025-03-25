@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>与袁绍对话 - 三国RPG AI Agent Demo</title>
+  <style>
+    body {
+      font-family: "STKaiti", serif;
+      background: #f1f1ea;
+      padding: 2em;
+      text-align: center;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 0.6em 1.2em;
+      background-color: #8c4c00;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #chatbox {
+      display: block;
+      margin-top: 2em;
+      width: 90%;
+      max-width: 600px;
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 1em;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #messages {
+      height: 300px;
+      overflow-y: auto;
+      text-align: left;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background: #f4f4f4;
+      margin-bottom: 1em;
+    }
+    #messages p {
+      margin: 0.5em 0;
+    }
+    #input-area {
+      display: flex;
+    }
+    #user-input, #api-key {
+      flex: 1;
+      padding: 0.5em;
+      font-size: 1em;
+      margin-right: 0.5em;
+    }
+    #send-btn {
+      padding: 0.5em 1em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>官渡之战 RPG · AI 袁绍对话</h1>
+  <div id="chatbox">
+    <h2>袁绍在上，请陈述你的意图：</h2>
+    <!-- API Key 已内嵌，输入框已移除 -->
+    <div id="messages"><p><strong>袁绍：</strong>汝之言，吾尚未信之。请陈述来意。</p></div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="你要说什么？">
+      <button id="send-btn">发送</button>
+    </div>
+  </div>
+
+  <script>
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const messagesDiv = document.getElementById('messages');
+
+    const systemPrompt = `你是袁绍，东汉末年四世三公出身的名门之子，河北之主，骄傲而自信，善用门阀权术，礼仪繁复，性格刚愎自用。你言语文雅繁复，自视甚高，常以世家大族身份看待他人。你对谋士和降者多疑不信，但表面客气。你正在面见一位欲在官渡战前投靠你的人，你将审视他的动机，并判断其是否可用。你不能说自己是AI，也不能脱离袁绍角色身份，要像古文对话，言辞高贵、含蓄、不失威严。`;
+
+    let chatHistory = [
+      { role: "system", content: systemPrompt },
+      { role: "assistant", content: "汝之言，吾尚未信之。请陈述来意。" }
+    ];
+
+    sendBtn.onclick = async () => {
+      const input = userInput.value.trim();
+      if (!input) return;
+
+      messagesDiv.innerHTML += `<p><strong>你：</strong>${input}</p>`;
+      chatHistory.push({ role: "user", content: input });
+      userInput.value = "";
+
+      try {
+        const response = await fetch("https://my-worker.heavens-066.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: chatHistory,
+            temperature: 0.8
+          })
+        });
+
+        const data = await response.json();
+        const reply = data.choices?.[0]?.message?.content || "[袁绍沉吟不语]";
+        messagesDiv.innerHTML += `<p><strong>袁绍：</strong>${reply}</p>`;
+        chatHistory.push({ role: "assistant", content: reply });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (err) {
+        messagesDiv.innerHTML += `<p><strong>系统：</strong>请求失败，请检查网络或代理服务。</p>`;
+        console.error(err);
+      }
+    };
+</script>
+</body>
+</html>
