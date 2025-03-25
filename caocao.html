@@ -2,69 +2,87 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>进谏曹操 - 三国RPG AI Agent Demo</title>
   <style>
-    body {
-      font-family: "STKaiti", serif;
-      background: #f9f5e9;
-      padding: 2em;
-      text-align: center;
-    }
-    button {
-      font-size: 1.2em;
-      padding: 0.6em 1.2em;
-      background-color: #7b3f00;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    #chatbox {
-      display: none;
-      position: fixed;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 600px;
-      background: #fff;
-      border: 2px solid #333;
-      border-radius: 10px;
-      padding: 1em;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      z-index: 1000;
-    }
-    #messages {
-      height: 300px;
-      overflow-y: auto;
-      text-align: left;
-      border: 1px solid #ccc;
-      padding: 10px;
-      background: #f4f4f4;
-      margin-bottom: 1em;
-    }
-    #messages p {
-      margin: 0.5em 0;
-    }
-    #input-area {
-      display: flex;
-    }
-    #user-input {
-      flex: 1;
-      padding: 0.5em;
-      font-size: 1em;
-      margin-right: 0.5em;
-    }
-    #send-btn {
-      padding: 0.5em 1em;
-      font-size: 1em;
-    }
-    #close-btn {
-      margin-top: 1em;
-      color: #888;
-      cursor: pointer;
-    }
-  </style>
+body {
+  font-family: "STKaiti", serif;
+  background: #f9f5e9;
+  padding: 1em;
+  margin: 0;
+  text-align: center;
+}
+
+button {
+  font-size: 1em;
+  padding: 0.6em 1em;
+  background-color: #7b3f00;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5em auto;
+}
+
+#chatbox {
+  display: none;
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 600px;
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 1em;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+#messages {
+  height: 300px;
+  overflow-y: auto;
+  text-align: left;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #f4f4f4;
+  margin-bottom: 1em;
+  font-size: 0.95em;
+}
+
+#messages p {
+  margin: 0.5em 0;
+}
+
+#input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+#user-input {
+  padding: 0.5em;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#send-btn {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  width: 100%;
+}
+
+#close-btn {
+  margin-top: 1em;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+</style>
 </head>
 <body>
   <h1>官渡之战 进谏 曹操 </h1>
