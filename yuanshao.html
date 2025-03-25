@@ -1,89 +1,104 @@
 
 <!DOCTYPE html>
+
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <title>进谏袁绍 - 三国RPG AI Agent Demo</title>
-  <style>
-    body {
-      font-family: "STKaiti", serif;
-      background: #f1f1ea;
-      padding: 2em;
-      text-align: center;
-    }
-    button {
-      font-size: 1.2em;
-      padding: 0.6em 1.2em;
-      background-color: #8c4c00;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    #chatbox {
-      display: none;
-      position: fixed;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 600px;
-      background: #fff;
-      border: 2px solid #333;
-      border-radius: 10px;
-      padding: 1em;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-      z-index: 1000;
-    }
-    #messages {
-      height: 300px;
-      overflow-y: auto;
-      text-align: left;
-      border: 1px solid #ccc;
-      padding: 10px;
-      background: #f4f4f4;
-      margin-bottom: 1em;
-    }
-    #messages p {
-      margin: 0.5em 0;
-    }
-    #input-area {
-      display: flex;
-    }
-    #user-input, #api-key {
-      flex: 1;
-      padding: 0.5em;
-      font-size: 1em;
-      margin-right: 0.5em;
-    }
-    #send-btn {
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>进谏袁绍 - 三国RPG AI Agent Demo</title>
+<style>
+body {
+  font-family: "STKaiti", serif;
+  background: #f1f1ea;
+  padding: 1em;
+  margin: 0;
+  text-align: center;
+}
+
+button {
+  font-size: 1em;
+  padding: 0.6em 1em;
+  background-color: #7b3f00;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5em auto;
+}
+
+#chatbox {
+  display: none;
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 600px;
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 1em;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+#messages {
+  height: 300px;
+  overflow-y: auto;
+  text-align: left;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #f4f4f4;
+  margin-bottom: 1em;
+  font-size: 0.95em;
+}
+
+#messages p {
+  margin: 0.5em 0;
+}
+
+#input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+#user-input {
+  padding: 0.5em;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#send-btn {
   padding: 0.5em 1em;
   font-size: 1em;
+  width: 100%;
 }
+
 #close-btn {
   margin-top: 1em;
   color: #888;
   cursor: pointer;
+  font-size: 0.9em;
 }
-      padding: 0.5em 1em;
-      font-size: 1em;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <h1>官渡之战 进谏 袁绍</h1>
-  <button onclick="document.getElementById('chatbox').style.display='block'">进谏袁绍</button>
-  <div id="chatbox" style="display:none;">
-    <h2>进谏袁绍</h2>
-    <!-- API Key 已内嵌，输入框已移除 -->
-    <div id="messages"><p><strong>袁绍：</strong>汝之言，吾尚未信之。请陈述来意。</p></div>
-    <div id="input-area">
-      <input type="text" id="user-input" placeholder="你要说什么？">
-      <button id="send-btn">发送</button>
-    </div>
-  </div>
-
-  <script>
+<h1>官渡之战 进谏 袁绍</h1>
+<button onclick="document.getElementById('chatbox').style.display='block'">进谏袁绍</button>
+<div id="chatbox" style="display:none;">
+<h2>进谏袁绍</h2>
+<!-- API Key 已内嵌，输入框已移除 -->
+<div id="messages"><p><strong>袁绍：</strong>汝之言，吾尚未信之。请陈述来意。</p></div>
+<div id="input-area">
+<input id="user-input" placeholder="你要说什么？" type="text"/>
+<button id="send-btn">发送</button>
+</div>
+<div id="close-btn" onclick="document.getElementById('chatbox').style.display='none'">❌ 关闭</div></div>
+<script>
     const sendBtn = document.getElementById('send-btn');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
