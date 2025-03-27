@@ -97,7 +97,51 @@ button {
 <input id="user-input" placeholder="你要说什么？" type="text"/>
 <button id="send-btn">发送</button>
 </div>
-<div id="close-btn" onclick="document.getElementById('chatbox').style.display='none'">❌ 结束对话</div></div>
+<div id="close-btn" onclick="// 移除旧关闭逻辑">❌ 结束对话</div></div>
+<script>
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const messagesDiv = document.getElementById('messages');
+
+    const systemPrompt = `你是袁绍，东汉末年四世三公出身的名门之子，河北之主，骄傲而自信，善用门阀权术，礼仪繁复，性格刚愎自用。你言语文雅繁复，自视甚高，常以世家大族身份看待他人。你对谋士和降者多疑不信，但表面客气。你正在面见一位欲在官渡战前投靠你的人，你将审视他的动机，并判断其是否可用。你不能说自己是AI，也不能脱离袁绍角色身份，要像古文对话，言辞高贵、含蓄、不失威严。`;
+
+    let chatHistory = [
+      { role: "system", content: systemPrompt },
+      { role: "assistant", content: "汝之言，吾尚未信之。请陈述来意。" }
+    ];
+
+    sendBtn.onclick = async () => {
+      const input = userInput.value.trim();
+      if (!input) return;
+
+      messagesDiv.innerHTML += `<p><strong>你：</strong>${input}</p>`;
+      chatHistory.push({ role: "user", content: input });
+      userInput.value = "";
+
+      try {
+        const response = await fetch("https://my-worker.heavens-066.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: chatHistory,
+            temperature: 0.8
+          })
+        });
+
+        const data = await response.json();
+        const reply = data.choices?.[0]?.message?.content || "[袁绍沉吟不语]";
+        messagesDiv.innerHTML += `<p><strong>袁绍：</strong>${reply}</p>`;
+        chatHistory.push({ role: "assistant", content: reply });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (err) {
+        messagesDiv.innerHTML += `<p><strong>系统：</strong>请求失败，请检查网络或代理服务。</p>`;
+        console.error(err);
+      }
+    };
+</script>
 
 <script>
   function getQueryParam(name) {
@@ -105,18 +149,17 @@ button {
     return url.searchParams.get(name);
   }
 
-  const returnTo = getQueryParam('returnTo') || '';
+  const from = getQueryParam('from') || '';
   const closeBtn = document.getElementById('close-btn');
   closeBtn.onclick = () => {
     alert('你告辞离去，准备回营...');
-    if (returnTo) {
-      window.location.href = `index.html?returnTo=${returnTo}`;
+    if (from) {
+      window.location.href = `index.html#${from}`;
     } else {
       window.location.href = 'index.html';
     }
   };
 </script>
 </body>
-
 </html>
 
