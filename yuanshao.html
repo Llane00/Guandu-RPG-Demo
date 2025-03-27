@@ -97,7 +97,7 @@ button {
 <input id="user-input" placeholder="你要说什么？" type="text"/>
 <button id="send-btn">发送</button>
 </div>
-<div id="close-btn" onclick="document.getElementById('chatbox').style.display='none'">❌ 关闭</div></div>
+<div id="close-btn" onclick="// 移除旧关闭逻辑">❌ 结束对话</div></div>
 <script>
     const sendBtn = document.getElementById('send-btn');
     const userInput = document.getElementById('user-input');
@@ -142,5 +142,24 @@ button {
       }
     };
 </script>
+
+<script>
+  function getQueryParam(name) {
+    const url = new URL(window.location.href);
+    return url.searchParams.get(name);
+  }
+
+  const from = getQueryParam('from') || '';
+  const closeBtn = document.getElementById('close-btn');
+  closeBtn.onclick = () => {
+    alert('你告辞离去，准备回营...');
+    if (from) {
+      window.location.href = `index.html#${from}`;
+    } else {
+      window.location.href = 'index.html';
+    }
+  };
+</script>
 </body>
 </html>
+
