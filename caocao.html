@@ -77,27 +77,70 @@
       <input type="text" id="user-input" placeholder="你想说什么？">
       <button id="send-btn">发送</button>
     </div>
-    <div id="close-btn" onclick="document.getElementById('chatbox').style.display='none'">❌ 关闭</div>
+    <div id="close-btn" onclick="// 移除旧关闭逻辑">❌ 关闭</div>
   </div>
 
-  
+  <script>
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const messagesDiv = document.getElementById('messages');
+
+    const systemPrompt = `你是东汉末年魏国丞相曹操。你雄才大略、多疑谨慎，重视实用之才，善于借刀杀人、分析人心。你面前的玩家曾经在战前犹豫不决，现在才来投靠。你对他有所保留，但你也看重有胆识之人。你说话时要展现你的性格：逻辑清晰，冷静自信，善于推理别人的动机。你不能说自己是AI，也不要表现出“现代语言模型”的痕迹。你要把每一次玩家说的话当作一次“进谏”、“求仕”或“辩解”，并用“曹操”的口气回复。`;
+
+    let chatHistory = [
+      { role: "system", content: systemPrompt },
+      { role: "assistant", content: "来者何人？此时投奔，可有何用？" }
+    ];
+
+    sendBtn.onclick = async () => {
+      const input = userInput.value.trim();
+      if (!input) return;
+
+      messagesDiv.innerHTML += `<p><strong>你：</strong>${input}</p>`;
+      chatHistory.push({ role: "user", content: input });
+      userInput.value = "";
+
+      try {
+        const response = await fetch("https://my-worker.heavens-066.workers.dev", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: chatHistory,
+            temperature: 0.8
+          })
+        });
+
+        const data = await response.json();
+        const reply = data.choices?.[0]?.message?.content || "[曹操沉默不语]";
+        messagesDiv.innerHTML += `<p><strong>曹操：</strong>${reply}</p>`;
+        chatHistory.push({ role: "assistant", content: reply });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      } catch (err) {
+        messagesDiv.innerHTML += `<p><strong>系统：</strong>请求失败，请检查网络或代理服务。</p>`;
+        console.error(err);
+      }
+    };
+  </script>
+
 <script>
   function getQueryParam(name) {
     const url = new URL(window.location.href);
     return url.searchParams.get(name);
   }
 
-  const returnTo = getQueryParam('returnTo') || '';
+  const from = getQueryParam('from') || '';
   const closeBtn = document.getElementById('close-btn');
   closeBtn.onclick = () => {
     alert('你告辞离去，准备回营...');
-    if (returnTo) {
-      window.location.href = `index.html?returnTo=${returnTo}`;
+    if (from) {
+      window.location.href = `index.html#${from}`;
     } else {
       window.location.href = 'index.html';
     }
   };
 </script>
 </body>
-
 </html>
