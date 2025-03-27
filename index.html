@@ -528,19 +528,6 @@ h(Math,"asinh",xr.asinh,Math.asinh(1e300)===Infinity);h(Math,"atanh",xr.atanh,Ma
     }
   };
 </script>
-
-<script>
-  window.addEventListener("load", () => {
-    const params = new URL(window.location.href).searchParams;
-    const returnTo = params.get("returnTo");
-    if (returnTo && typeof window.Engine !== 'undefined') {
-      setTimeout(() => {
-        Engine.play(returnTo);
-      }, 100);
-    }
-  });
-</script>
 </body>
-
 
 </html>
