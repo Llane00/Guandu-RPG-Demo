@@ -513,5 +513,18 @@ h(Math,"asinh",xr.asinh,Math.asinh(1e300)===Infinity);h(Math,"atanh",xr.atanh,Ma
 ;require("harlowe")}());
 </script>
 
+
+<script>
+  window.onload = () => {
+    const hash = location.hash.replace('#', '');
+    if (hash === 'guandu1') {
+      const el = document.getElementById('guandu1');
+      if (el) el.style.display = 'block';
+    } else if (hash === 'explore2') {
+      const el = document.getElementById('explore2');
+      if (el) el.style.display = 'block';
+    }
+  };
+</script>
 </body>
 </html>
